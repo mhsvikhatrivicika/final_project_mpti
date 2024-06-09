@@ -2,44 +2,52 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use Notifiable, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Nama tabel yang diwakili oleh model ini
+    protected $table = 'users';
+
+    // Primary Key untuk tabel users
+    protected $primaryKey = 'id';
+
+    // Apakah primary key auto increment
+    public $incrementing = true;
+
+    // Tipe data primary key (opsional, jika id adalah integer default, bisa diabaikan)
+    protected $keyType = 'int';
+
+    // Apakah timestamps digunakan (created_at dan updated_at)
+    public $timestamps = true;
+
+    // Kolom-kolom yang boleh diisi secara massal
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'role',
+        'nama',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Kolom-kolom yang harus disembunyikan dalam serialisasi, seperti untuk API
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    // Jika role memiliki tipe data ENUM atau CHAR yang ditentukan, bisa menggunakan casts
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'role' => 'char',
     ];
+
+    // Relasi dengan model lainnya bisa ditambahkan di sini (contoh: posts, comments, dsb.)
+    // Misalnya, jika user memiliki banyak pinjaman:
+    // public function pinjaman()
+    // {
+    //     return $this->hasMany(Pinjaman::class, 'id_member', 'id');
+    // }
 }
